@@ -41,7 +41,9 @@ public class PurchaseConsumer {
 						&& e.getCreationDate().getTime() <= _dateEnd.getTime())
 				.collect(Collectors.maxBy(Comparator.comparing(ExchangeRate::getIdExchangeRate))).blockOptional().get()
 				.get();
+		if(exchangeRate!=null) {
 		purchaseRequestKafka.setAmountInCurrency(purchaseRequestKafka.getAmountBitcoin()*exchangeRate.getExchangeRateSale());
 		kafkaTemplate.send(exchangeTopicResponse,purchaseRequestKafka);
+		}
 	}
 }
